@@ -2,7 +2,7 @@ runQueueWithArray: queueDriver.o queue_array.o
 	gcc -o runQueueWithArray queueDriver.o queue_array.o heap_usage.o
 	./runQueueWithArray
 
-runqueueWithLL: queueDriver.o queue_ll.o linked_list.o
+runQueueWithLL: queueDriver.o queue_ll.o linked_list.o
 	gcc -o runqueueWithLL queueDriver.o queue_ll.o linked_list.o
 	./runqueueWithLL
 
@@ -18,3 +18,4 @@ heap_usage.o: heap_usage.c
 	gcc -c heap_usage.c
 clean:
 	rm -f *.o runQueueWithArray
+	rm -f *.o runQueueWithLL
