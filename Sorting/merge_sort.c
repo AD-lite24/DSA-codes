@@ -25,21 +25,17 @@ void merge_sort(int a[], int length){
 }
 
 void merge_sort_recursion(int a[], int l, int r){
-    // printf("recursingggggg!\n");
-    // printf("%d, %d\n", l, r);
+    
     if (l < r){
-        // printf("recursing!\n");
         int mid = l + (r-l)/2;
         merge_sort_recursion(a, l, mid);
-        // printf("test");
         merge_sort_recursion(a, mid+1, r);
-        // printf("On way to merge\n");
         merge_sorted_arrays(a, l, mid, r);
     }
 }
 
 void merge_sorted_arrays(int a[], int l, int mid, int r){
-    // printf("Merging!\n");
+
     int l_len = mid - l + 1;
     int r_len = r - mid;
     
