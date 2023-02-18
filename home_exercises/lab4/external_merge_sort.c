@@ -2,19 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "merge_sort.h"
-
-// typedef struct person{
-//     int id;
-//     char *name;
-//     int age;
-//     int height;
-//     int weight;
-// } Person;
+#include <math.h>
 
 Person* readCsv(FILE* fp, int length);
 void sortArr(Person arr[], int length);
 void writeToCSV(Person arr[], int length, int idx);
-void externalMerge(int l, int numf);
+void externalMerge(int numf);
+void mergeFiles(FILE *in1, FILE *in2, FILE *out);
 
 int main(){
 
@@ -26,23 +20,23 @@ int main(){
     while(sizeEntries--){
         if (sizeEntries == 0){
 
-            printf("test");
+
             Person* pArr = readCsv(fp, 578440);
             sortArr(pArr, 578440);
             writeToCSV(pArr, 578440, 8 - sizeEntries);
         }
         else{
-            printf("int the loop at idx %d\n", 8-sizeEntries);            
+    
             Person* pArr = readCsv(fp, 1000000);
-            // printf("func1 done \n");
             sortArr(pArr, 1000000);
-            // printf("func2 done \n");
             writeToCSV(pArr, 1000000, 8 - sizeEntries);
-            // printf("funk3 done \n");
+
         }
     }
 
     fclose(fp);
+
+    externalMerge(8);
 
 }
 
@@ -78,39 +72,123 @@ Person* readCsv(FILE* fp, int length){
 }
 
 void writeToCSV(Person arr[], int length, int idx){
+
     char append = (idx + '0');
     char name[10] = "filex.csv";
     name[4] = append;
-    // printf("test\n");
+
 
     FILE* fp = fopen(name, "w+");
-    // printf("hello\n");
+
     int i;
     for (i = 0; i < length; i++){
     
         fprintf(fp, "%d,%s,%d,%d,%d\n", arr[i].id, arr[i].name, arr[i].age, arr[i].height, arr[i].weight);
     }
-    for (; i < 1000000; i++)
-        fprintf(fp, "%d,%s,%d,%d,%d\n", 0, " ", 0, 0, 0); //populating with dummy values
 
     fclose(fp);
+
 }
 
 void sortArr(Person arr[], int length){
-    printf("inside interface\n");
+
     merge_sort(arr, length);
 }
 
-void externalMerge(int l, int numf){
+void externalMerge(int numf){
+
     //merge the files
     FILE* in[numf]; //array of all the file pointers
     for (int i = 1; i <= numf; i++){
+
         char file_name[20] = "filex.csv";
         file_name[4] = i + '0';
-        FILE* fp = fopen(file_name, "r");
+        FILE* fp = fopen(file_name, "r+");
         in[i-1] = fp;
     }
 
-    FILE *out = fopen("output_file", "w"); //final output file
-    
+
+    //final output in file1.csv
+
+    int numMergedChunks = numf;
+    printf("num of chunks: %d\n", numMergedChunks);
+
+
+    while (numMergedChunks != 1){
+
+        int i;
+        for (i = 0; i < 8; i += (int)pow(2, 8/numMergedChunks)) {
+            FILE *in1 = in[i];
+            FILE *in2 = in[i + (int)pow(2, 4/numMergedChunks)];
+            FILE *out = tmpfile();
+
+            printf("in1: %d, in2: %d\n", i, i + (int)pow(2, 4/numMergedChunks));
+            mergeFiles(in1, in2, out);
+
+            fclose(in[i]);
+            char filename[20] = "filex.csv";
+            filename[4] = i + 1 + '0';
+            FILE* fp = fopen(filename, "w+");
+            rewind(out);
+            char c = fgetc(out);
+            while (c != EOF)
+            {
+                fputc(c, fp); //TO DO: copying files; major inefficiency, make new file instead of copying
+                c = fgetc(out);
+            }
+            rewind(fp);
+            in[i] = fp;
+            in[i + (int)pow(2, 4/numMergedChunks)] = NULL;
+            fclose(out);
+        }
+
+
+        if (numMergedChunks % 2 != 0) {
+            // Special case for odd number of chunks
+            in[numMergedChunks - 1] = in[numMergedChunks - 2];
+            in[numMergedChunks - 2] = NULL;
+        }
+        printf("before: %d\n", numMergedChunks);
+        numMergedChunks = (numMergedChunks + 1) / 2;
+        printf("after: %d\n", numMergedChunks);
+    }
+
+
+}
+
+void mergeFiles(FILE *in1, FILE *in2, FILE *out) {
+
+    Person p1, p2;
+    p1.name = malloc(30);
+    p2.name = malloc(30);
+    rewind(in1);
+    rewind(in2);
+
+    fscanf(in1, "%d,%[^,],%d,%d,%d", &p1.id, p1.name, &p1.age, &p1.height, &p1.weight);
+    fscanf(in2, "%d,%[^,],%d,%d,%d", &p2.id, p2.name, &p2.age, &p2.height, &p2.weight);
+
+    while (!feof(in1) && !feof(in2)) {
+
+        if (p1.height < p2.height) {
+            fprintf(out, "%d,%s,%d,%d,%d\n", p1.id, p1.name, p1.age, p1.height, p1.weight);
+            fscanf(in1, "%d,%[^,],%d,%d,%d", &p1.id, p1.name, &p1.age, &p1.height, &p1.weight);
+        } 
+        else {
+            fprintf(out, "%d,%s,%d,%d,%d\n", p2.id, p2.name, p2.age, p2.height, p2.weight);
+            fscanf(in2, "%d,%[^,],%d,%d,%d", &p2.id, p2.name, &p2.age, &p2.height, &p2.weight);
+        }
+    }
+
+    while (!feof(in1)) {
+        fprintf(out, "%d,%s,%d,%d,%d\n", p1.id, p1.name, p1.age, p1.height, p1.weight);
+        fscanf(in1, "%d,%[^,],%d,%d,%d", &p1.id, p1.name, &p1.age, &p1.height, &p1.weight);
+    }
+
+    while (!feof(in2)) {
+        fprintf(out, "%d,%s,%d,%d,%d\n", p2.id, p2.name, p2.age, p2.height, p2.weight);
+        fscanf(in2, "%d,%[^,],%d,%d,%d", &p2.id, p2.name, &p2.age, &p2.height, &p2.weight);
+    }
+
+    rewind(in1);
+    rewind(in2);
 }
