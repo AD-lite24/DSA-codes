@@ -7,3 +7,6 @@ external_merge_sort.o: external_merge_sort.c
 
 merge_sort.o: merge_sort.c merge_sort.h
 	gcc -c merge_sort.c
+
+clean:
+	rm -f *.o runExternalMerge

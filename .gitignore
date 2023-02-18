@@ -1,10 +1,16 @@
 # Prerequisites
 *.d
 
+#files
+*.csv
+
+#editor
+.vscode*
+
 # Object files
 *.o
 *.ko
-*.obj
+*.objß
 *.elf
 
 # Linker output
