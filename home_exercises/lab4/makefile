@@ -11,5 +11,3 @@ merge_sort.o: merge_sort.c merge_sort.h
 clean:
 	rm -f *.o runExternalMerge
 	rm -f *
-	rm -f *.csv \
-	$(filter-out dat7578440.csv,$(wildcard *.csv))
