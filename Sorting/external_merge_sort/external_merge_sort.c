@@ -19,25 +19,18 @@ int main(){
     
     while(sizeEntries--){
         if (sizeEntries == 0){
-
-
             Person* pArr = readCsv(fp, 578440);
             sortArr(pArr, 578440);
             writeToCSV(pArr, 578440, 8 - sizeEntries);
         }
         else{
-    
             Person* pArr = readCsv(fp, 1000000);
             sortArr(pArr, 1000000);
             writeToCSV(pArr, 1000000, 8 - sizeEntries);
-
         }
     }
-
     fclose(fp);
-
     externalMerge(8);
-
 }
 
 Person* readCsv(FILE* fp, int length){
@@ -95,7 +88,6 @@ void sortArr(Person arr[], int length){
 
 void externalMerge(int numf){
 
-    //merge the files
     FILE* in[numf]; //array of all the file pointers
     //NOTE: Storing array of file names would be better 
 
@@ -105,7 +97,6 @@ void externalMerge(int numf){
         FILE* fp = fopen(file_name, "r+");
         in[i-1] = fp;
     }
-
 
     //final output in file1.csv
 
