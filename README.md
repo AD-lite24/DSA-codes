@@ -24,3 +24,8 @@ or
 ```
 make runQueueWithLL
 ```
+## Sorting
+Contains various sorting algorithms and their implementations
+* Insertion sort
+* Merge sort
+* External Merge Sort 
