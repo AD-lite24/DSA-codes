@@ -1,9 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "linked_list.h"
+#include "element.h"
+
+//Linked list files not yet configured
 
 typedef struct node* NODE;
 typedef struct linked_list* LIST;
+
+Element itoe (int i)
+{
+    Element e;
+    e.int_value = i;
+    e.float_value = 0;
+    return e;
+}
 
 int checkCycleUsingFastPointer(LIST list){
     NODE temp_s = list->head;
@@ -26,12 +37,12 @@ int main(){
     LIST list = (LIST)malloc(sizeof(struct linked_list));
 
     list->head = NULL;
-    list->size = 0;
 
-    addEleToTheEnd(1, list);
-    addEleToTheEnd(2, list);
-    addEleToTheEnd(3, list);
-    addEleToTheEnd(4, list);
+
+    insertNodeAtEnd(1, list);
+    insertNodeAtEnd(2, list);
+    insertNodeAtEnd(3, list);
+    insertNodeAtEnd(4, list);
 
     int val = checkCycleUsingFastPointer(list);
 
@@ -45,8 +56,8 @@ int main(){
 
     temp->next = last;
     last->next = list->head->next;
-    last->ele = 100;
-    list->size++;
+    last->data = itoe(100);
+
 
     val = checkCycleUsingFastPointer(list);
 
