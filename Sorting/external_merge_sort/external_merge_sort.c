@@ -99,8 +99,9 @@ void externalMerge(int numf){
 
     //merge the files
     FILE* in[numf]; //array of all the file pointers
-    for (int i = 1; i <= numf; i++){
+    //NOTE: Storing array of file names would be better 
 
+    for (int i = 1; i <= numf; i++){
         char file_name[20] = "filex.csv";
         file_name[4] = i + '0';
         FILE* fp = fopen(file_name, "r+");
@@ -117,7 +118,7 @@ void externalMerge(int numf){
     while (numMergedChunks != 1){
 
         int i;
-        for (i = 0; i < 8; i += (int)pow(2, 8/numMergedChunks)) {
+        for (i = 0; i < 8; i += (int)pow(2, 8/numMergedChunks)) {  //algorithm can be simpler
             FILE *in1 = in[i];
             FILE *in2 = in[i + (int)pow(2, 4/numMergedChunks)];
             FILE *out = tmpfile();
