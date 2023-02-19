@@ -50,13 +50,11 @@ Person* readCsv(FILE* fp, int length){
         Person p;
         p.name = (char*)malloc(30);
 
-        fgets(buffer, 1024, fp);
+        fgets(buffer, 1024, fp); //used fgets here and fscanf later on for variety`
         char* value = strtok(buffer, ",");
 
         p.id = atoi(value);
         value = strtok(NULL, ",");
-
-
         strcpy(p.name, value);
 
         value = strtok(NULL, ",");
