@@ -38,11 +38,12 @@ int main(){
 
     list->head = NULL;
 
+    
+    insertNodeAtEnd(createNewNode(itoe(1)), list);
+    insertNodeAtEnd(createNewNode(itoe(2)), list);
+    insertNodeAtEnd(createNewNode(itoe(3)), list);
+    insertNodeAtEnd(createNewNode(itoe(4)), list);
 
-    insertNodeAtEnd(1, list);
-    insertNodeAtEnd(2, list);
-    insertNodeAtEnd(3, list);
-    insertNodeAtEnd(4, list);
 
     int val = checkCycleUsingFastPointer(list);
 

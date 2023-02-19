@@ -27,3 +27,11 @@ void removeFirstNode(LIST list){
     list->head = newFirst;
     free(first);
 }
+
+void insertNodeAtEnd(NODE node, LIST list){
+    NODE temp = list->head;
+    while (temp->next != NULL){
+        temp = temp->next;
+    }
+    temp->next = node;
+}
