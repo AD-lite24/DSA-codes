@@ -44,7 +44,6 @@ int main(){
     insertNodeAtEnd(createNewNode(itoe(3)), list);
     insertNodeAtEnd(createNewNode(itoe(4)), list);
 
-
     int val = checkCycleUsingFastPointer(list);
 
     printf("%d\n", val);
