@@ -4,7 +4,11 @@
 static node *create_node_for_list(process p);
 // Check header files for documentation/ function description
 process_linked_list *create_empty_process_linked_list() {
-    // COMPLETE
+    process_linked_list* p = malloc(sizeof(process_linked_list));
+    p->head = NULL;
+    p->size = 0;
+
+    return p;
 }
 
 bool add_first_to_linked_list(process_linked_list *list, process p) {
@@ -16,21 +20,80 @@ bool add_last_to_linked_list(process_linked_list *list, process p) {
 }
 
 bool add_at_index_linked_list(process_linked_list *list, size_t index, process p) {
-   // COMPLETE
+   if (index == 0){ //add at beginning
+        node* temp = list->head;
+        node* new = create_node_for_list(p);
+        list->head = new;
+        new->previous = NULL;
+        new->next = temp;
+        list->size++;
+        return true;
+   }
+
+   else if (index > list->size) return false; //not possible to add
+
+   else if (index == list->size){
+        node* new = create_node_for_list(p);
+        node* temp = list->head;
+
+        while(temp->next != NULL){
+            temp = temp->next;
+        }
+
+        temp->next = new;
+        new->previous = temp;
+        list->size++;
+        return true;
+   }
+
+   else {
+        
+        node* new = create_node_for_list(p);
+        node* temp = list->head;
+        for (int i = 0; i < index; i++){
+            temp = temp->next;
+        } 
+        node* prev = temp->previous;
+        prev->next = new;
+        new->previous = prev;
+        new->next = temp;
+        temp->previous = new;
+        list->size++;
+        return true;
+   }
+
 }
 
 bool remove_first_linked_list(process_linked_list *list, process *p) {
     if (list->size == 0) {
         return false;
     }
-   // COMPLETE
+
+    node* temp = list->head;
+    p = temp->process;
+    list->head = temp->next;
+    list->head->previous = NULL;
+    free(temp);
+    list->size--;
+    return true;
 }
 
 bool remove_last_linked_list(process_linked_list *list, process *p) {
     if (list->size == 0) {
         return false;
     }
-   // COMPLETE
+    
+    node* temp = list->head;
+    while (temp->next != NULL){
+        temp = temp->next;
+    }
+
+    node* prev = temp->previous;
+    prev->next = NULL;
+    p = temp->process;
+    free(temp);
+    list->size--;
+    return true;
 }
 
 size_t get_size_linked_list(process_linked_list *list) {
@@ -38,7 +101,7 @@ size_t get_size_linked_list(process_linked_list *list) {
 }
 
 void print_linked_list(process_linked_list *list) {
-    node *tracker = list->head->next;
+    node *tracker = list->head;
     for (int i = 0; i < list->size; ++i) {
         printf("%d => ", tracker->process->pid);
         tracker = tracker->next;
