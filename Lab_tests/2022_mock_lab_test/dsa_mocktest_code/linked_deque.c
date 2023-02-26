@@ -13,6 +13,10 @@ bool add_first_linked_deque(linked_deque *ld, process p) {
     return add_first_to_linked_list(ld->list, p);
 }
 
+process* get_front_linked_deque(linked_deque* ld){
+    return ld->list->head->process;
+}
+
 
 bool add_last_linked_deque(linked_deque *ld, process p) {
     return add_last_to_linked_list(ld->list, p);

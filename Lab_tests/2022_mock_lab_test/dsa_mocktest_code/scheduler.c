@@ -66,11 +66,34 @@ static process **read_processes_from_file(char *filename, int *num_processes_ptr
     return processes;
 }
 
+bool checkIfComplete(int num_of_completions, int num_of_processes, int curr_time){
+    if (num_of_completions == num_of_processes) 
+        return true;
+    return false;
+}
+
+void checkArrivalTimes(process** processes, int num_of_processes, linked_deque* ld, int curr_time){
+    for (int i = 0; i < num_of_processes; i++){
+        process* p = processes[i];
+        if (curr_time = p->arrival){
+            add_last_linked_deque(ld, *p);
+        }
+    }
+}
+
+process* getProcessFromID(process** processes, int processID, int num_of_processes){
+    for (int i = 0; i < num_of_processes; i++){
+        if (processes[i]->pid = processID){
+            return processes[i];
+        }
+    }
+    return NULL;
+}
 
 void visualize_round_robin(char *path) {
     int num_processes;
     process **processes = read_processes_from_file(path, &num_processes);
-
+    
     printf("Number of processes: %d\n", num_processes);
     printf("%-10s%-15s%-15s%-15s%-15s\n", "Process", "Arrival Time", "Burst Time", "Waiting Time", "Turnaround Time");
 
@@ -78,16 +101,47 @@ void visualize_round_robin(char *path) {
 
     // COMPLETE using the ld for storing processes as described
 
+    int t = 0;
+    int timeJump = TIME_QUANTUM;
+    bool flag = false;
+    bool executing = false;
+    int pTime = 0;
+    
+    process* curr_process; 
+    int process_id = 0;
+    int num_of_completions = 0;
 
+    while(1){
 
+        curr_process = get_front_linked_deque(ld); //updating current process variables
+        process_id = curr_process->pid;
 
+        checkArrivalTimes(processes, num_processes, ld, t); //add processes as they arrive
 
+        if (executing){
+            //check single process completion and update burst times
+            if (curr_process->cpu_burst == 0){
+                executing = false;
+                // process_index++;
+            }
+            else{
+                curr_process->cpu_burst--;
+            }
+        }
 
+        if (pTime == timeJump || !executing){
+            //move to the next process and deque
+            pTime = 0;
+            remove_first_linked_deque(ld, curr_process);
+            // process_id = get_front_linked_deque(ld)->pid;
+            executing = true;
+        }
 
+        bool flag = checkIfComplete(num_of_completions, num_processes, t); //check if all processes are done
+        if (flag) break;
+        t++;
 
-
-
-
+    }
 
 
     // Free the allocated memory

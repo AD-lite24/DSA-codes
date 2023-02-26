@@ -2,6 +2,7 @@
 #define DSA_LINKED_DEQUE_H
 
 #include "linkedlist.h"
+#include "process.h"
 
 // The Linked-Deque API backed internally by a linked_list
 typedef struct process_linked_deque {
@@ -13,6 +14,8 @@ typedef struct process_linked_deque {
  * Also creates the internal linked list. 
  */
 linked_deque *create_linked_process_deque();
+
+process* get_front_linked_deque(linked_deque* ld);
 
 /**
  * Adds to the first position of the linked deque in constant time.
