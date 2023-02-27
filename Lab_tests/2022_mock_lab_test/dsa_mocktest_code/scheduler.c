@@ -77,6 +77,7 @@ void checkArrivalTimes(process** processes, int num_of_processes, linked_deque* 
         process* p = processes[i];
         if (curr_time == p->arrival){
             add_last_linked_deque(ld, *p);
+            printf("ID %d is in the queue! at time %d\n", p->pid, curr_time);
         }
     }
 }
@@ -88,13 +89,6 @@ process* getProcessFromID(process** processes, int processID, int num_of_process
         }
     }
     return NULL;
-}
-
-void populateDeque(process** processes, linked_deque* ld, int num_of_processes){
-    for (int i = 0; i < num_of_processes; i++){
-        printf("adding: %d\n", (processes[i])->pid);
-        add_last_linked_deque(ld, *(processes[i]));
-    }
 }
 
 void visualize_round_robin(char *path) {
@@ -114,40 +108,52 @@ void visualize_round_robin(char *path) {
     bool flag = false;
     bool executing = true;
     int pTime = 0; //process time
+    bool queueNow = true;
     
     process* curr_process; 
     int process_id = 0;
     int num_of_completions = 0;
 
-    populateDeque(processes, ld, num_processes);
+
 
     while(1){
+    
+        if (queueNow)
+            checkArrivalTimes(processes, num_processes, ld, t); //add processes as they arrive
 
+        // printf("process ID: %d at time: %d at ptime: %d and remaining time: %d\n", process_id, t, pTime, curr_process->remaining_time);
+            
+        queueNow = true;
+        t++;
         curr_process = get_front_linked_deque(ld); //updating current process variables
         process_id = curr_process->pid;
-        printf("process ID: %d at time: %d at ptime: %d and remaining time: %d\n", process_id, t, pTime, curr_process->remaining_time);
-        checkArrivalTimes(processes, num_processes, ld, t); //add processes as they arrive
 
         if (executing){
             //check single process completion and update burst times
+            
+            curr_process->remaining_time--;
+            
             if (curr_process->remaining_time == 0){
                 executing = false;
-                // process_index++;
                 num_of_completions++;
             }
             else{
-                curr_process->remaining_time--;
                 pTime++;
             }
+            
         }
+
 
         if (pTime == timeJump || !executing){
             //move to the next process and deque
             pTime = 0;
             remove_first_linked_deque(ld, curr_process);
 
-            if (curr_process->remaining_time != 0) //add back if execution not compeleted with the qauntum
+            if (curr_process->remaining_time != 0){ //add back if execution not compeleted with the qauntum
+                checkArrivalTimes(processes, num_processes, ld, t);
                 add_last_linked_deque(ld, *curr_process);
+                queueNow = false;
+            }
             else{
                 curr_process->turnaround = t - curr_process->arrival; //from the formula in the question
                 curr_process->wait = curr_process->turnaround - curr_process->cpu_burst;
@@ -159,7 +165,7 @@ void visualize_round_robin(char *path) {
 
         bool flag = checkIfComplete(num_of_completions, num_processes, t); //check if all processes are done
         if (flag) break;
-        t++;
+        
 
     }
 

@@ -69,31 +69,50 @@ bool remove_first_linked_list(process_linked_list *list, process *p) {
         return false;
     }
 
-    node* temp = list->head;
-    p = temp->process;
-    list->head = temp->next;
-    list->head->previous = NULL;
-    free(temp);
-    list->size--;
-    return true;
+    else if (list->size == 1){
+        node* temp = list->head;
+        p = temp->process;
+        free(temp);
+        list->size--;
+        return true;
+    }
+    else{
+        node* temp = list->head;
+        p = temp->process;
+        list->head = temp->next;
+        list->head->previous = NULL;
+        free(temp);
+        list->size--;
+        return true;
+    }
 }
 
 bool remove_last_linked_list(process_linked_list *list, process *p) {
     if (list->size == 0) {
         return false;
     }
-    
-    node* temp = list->head;
-    while (temp->next != NULL){
-        temp = temp->next;
+
+    else if (list->size == 1){
+        node* temp = list->head;
+        p = temp->process;
+        free(temp);
+        list->size--;
+        return true;
     }
 
-    node* prev = temp->previous;
-    prev->next = NULL;
-    p = temp->process;
-    free(temp);
-    list->size--;
-    return true;
+    else{
+        node* temp = list->head;
+        while (temp->next != NULL){
+            temp = temp->next;
+        }
+
+        node* prev = temp->previous;
+        prev->next = NULL;
+        p = temp->process;
+        free(temp);
+        list->size--;
+        return true;
+    }
 }
 
 size_t get_size_linked_list(process_linked_list *list) {
