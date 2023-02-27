@@ -21,7 +21,14 @@ static void resize_if_needed(array_deque *d);
 static process *create_process(process p);
 
 array_deque *create_empty_process_array_deque() {
-    // COMPLETE
+    array_deque* ad = calloc(1, sizeof(array_deque));
+    ad->processes = calloc(INITIAL_SIZE_ARRAY_DEQUE, sizeof(process));
+    ad->capacity = INITIAL_SIZE_ARRAY_DEQUE;
+    ad->next_first = 0;
+    ad->next_last = 0;
+    ad->size = 0;
+
+    return ad;
 }
 
 static unsigned int decrement_index(array_deque *ad, size_t index) {
@@ -45,7 +52,20 @@ static unsigned int get_last_index(array_deque *ad) {
 }
 
 bool add_first_array_deque(array_deque *ad, process p) {
-    // COMPLETE
+    
+    process* pro = create_process(p);
+    ad->processes[ad->next_first] = pro;
+    ad->next_first = decrement_index(ad, ad->next_first);
+    ad->size++;
+
+    if (ad->size == ad->capacity){
+        ad->processes = realloc(ad->processes, (ad->capacity)*2);
+        size_t curr_capacity = ad->capacity;
+        size_t new_capacity = curr_capacity*2;
+        ad->capacity = new_capacity;
+        printf("changed capacity from %d to %d\n", ad->size, ad->capacity);
+    }
+    return true;
 }
 
 static process *create_process(process p) {
@@ -56,15 +76,48 @@ static process *create_process(process p) {
 }
 
 bool add_last_array_deque(array_deque *ad, process p) {
-    // COMPLETE
+    
+    process* pro = create_process(p);
+    ad->processes[ad->next_last] = pro;
+    ad->next_last = (ad, ad->next_last);
+    ad->size++;
+
+    if (ad->size == ad->capacity){
+        ad->processes = realloc(ad->processes, (ad->capacity)*2);
+        ad->capacity = (ad->capacity)*2;
+        printf("changed capacity from %d to %d\n", ad->size, ad->capacity);
+    }
+    return true;
 }
 
 bool remove_first_array_deque(array_deque *ad, process *p) {
-    // COMPLETE
+    process* pro = (ad->processes)[get_first_index(ad)];
+    *p = *pro;
+    free(pro);
+    ad->size--;
+    ad->next_first = (ad, get_first_index(ad));
+
+    if (ad->size < (ad->capacity)/2 && (ad->capacity)/2 > INITIAL_SIZE_ARRAY_DEQUE){
+        ad->processes = realloc(ad->processes, ad->capacity/2);
+        ad->capacity = ad->capacity/2;
+    }
+
+    return true;
 }
 
 bool remove_last_array_deque(array_deque *ad, process *p) {
-    // COMPLETE
+    process* pro = (ad->processes)[get_last_index(ad)];
+    *p = *pro;
+    free(pro);
+    ad->size--;
+    ad->next_last = (ad, get_last_index(ad));
+
+    if (ad->size < (ad->capacity)/2 && (ad->capacity)/2 > INITIAL_SIZE_ARRAY_DEQUE){
+        ad->processes = realloc(ad->processes, ad->capacity/2);
+        ad->capacity = ad->capacity/2;
+    }
+
+    return true;
 }
 
 size_t get_size_array_deque(array_deque *ad) {

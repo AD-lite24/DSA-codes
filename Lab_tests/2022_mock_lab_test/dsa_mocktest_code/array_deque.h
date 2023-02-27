@@ -19,7 +19,7 @@ typedef struct process_array_deque {
 
 // creates an empty process array deque with INITIAL_SIZE_ARRAY_DEQUE size of the internal processes array
 // and returns a pointer to it
-array_deque *create_empty_process_array_deque();
+array_deque *create_empty_process_array_deque(); //done
 
 /**
  * adds to the front of the array deque in constant time "on average"
