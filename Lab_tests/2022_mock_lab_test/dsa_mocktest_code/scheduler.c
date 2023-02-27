@@ -75,7 +75,7 @@ bool checkIfComplete(int num_of_completions, int num_of_processes, int curr_time
 void checkArrivalTimes(process** processes, int num_of_processes, linked_deque* ld, int curr_time){
     for (int i = 0; i < num_of_processes; i++){
         process* p = processes[i];
-        if (curr_time = p->arrival){
+        if (curr_time == p->arrival){
             add_last_linked_deque(ld, *p);
         }
     }
@@ -83,11 +83,18 @@ void checkArrivalTimes(process** processes, int num_of_processes, linked_deque* 
 
 process* getProcessFromID(process** processes, int processID, int num_of_processes){
     for (int i = 0; i < num_of_processes; i++){
-        if (processes[i]->pid = processID){
+        if (processes[i]->pid == processID){
             return processes[i];
         }
     }
     return NULL;
+}
+
+void populateDeque(process** processes, linked_deque* ld, int num_of_processes){
+    for (int i = 0; i < num_of_processes; i++){
+        printf("adding: %d\n", (processes[i])->pid);
+        add_last_linked_deque(ld, *(processes[i]));
+    }
 }
 
 void visualize_round_robin(char *path) {
@@ -99,33 +106,38 @@ void visualize_round_robin(char *path) {
 
     linked_deque *ld = create_linked_process_deque();
 
+
     // COMPLETE using the ld for storing processes as described
 
     int t = 0;
     int timeJump = TIME_QUANTUM;
     bool flag = false;
-    bool executing = false;
-    int pTime = 0;
+    bool executing = true;
+    int pTime = 0; //process time
     
     process* curr_process; 
     int process_id = 0;
     int num_of_completions = 0;
 
+    populateDeque(processes, ld, num_processes);
+
     while(1){
 
         curr_process = get_front_linked_deque(ld); //updating current process variables
         process_id = curr_process->pid;
-
+        printf("process ID: %d at time: %d at ptime: %d and remaining time: %d\n", process_id, t, pTime, curr_process->remaining_time);
         checkArrivalTimes(processes, num_processes, ld, t); //add processes as they arrive
 
         if (executing){
             //check single process completion and update burst times
-            if (curr_process->cpu_burst == 0){
+            if (curr_process->remaining_time == 0){
                 executing = false;
                 // process_index++;
+                num_of_completions++;
             }
             else{
-                curr_process->cpu_burst--;
+                curr_process->remaining_time--;
+                pTime++;
             }
         }
 
@@ -133,7 +145,15 @@ void visualize_round_robin(char *path) {
             //move to the next process and deque
             pTime = 0;
             remove_first_linked_deque(ld, curr_process);
-            // process_id = get_front_linked_deque(ld)->pid;
+
+            if (curr_process->remaining_time != 0) //add back if execution not compeleted with the qauntum
+                add_last_linked_deque(ld, *curr_process);
+            else{
+                curr_process->turnaround = t - curr_process->arrival; //from the formula in the question
+                curr_process->wait = curr_process->turnaround - curr_process->cpu_burst;
+                print_stats(*curr_process);
+            }
+
             executing = true;
         }
 
