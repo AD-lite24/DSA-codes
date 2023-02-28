@@ -54,17 +54,19 @@ static unsigned int get_last_index(array_deque *ad) {
 bool add_first_array_deque(array_deque *ad, process p) {
     
     process* pro = create_process(p);
-    ad->processes[ad->next_first] = pro;
-    ad->next_first = decrement_index(ad, ad->next_first);
     ad->size++;
 
     if (ad->size == ad->capacity){
         ad->processes = realloc(ad->processes, (ad->capacity)*2);
-        size_t curr_capacity = ad->capacity;
-        size_t new_capacity = curr_capacity*2;
+        int curr_capacity = ad->capacity;
+        int new_capacity = curr_capacity*2;
         ad->capacity = new_capacity;
         printf("changed capacity from %d to %d\n", ad->size, ad->capacity);
     }
+    
+    ad->processes[ad->next_first] = pro;
+    ad->next_first = decrement_index(ad, ad->next_first);
+
     return true;
 }
 
@@ -132,5 +134,14 @@ static void resize_if_needed(array_deque *ad) {
 }
 
 void print_array_deque(array_deque *ad) {
-    
+
+    int first = get_first_index(ad);
+    int last = get_last_index(ad);
+    int size = get_size_array_deque(ad);
+
+    for (int i = first; i != last; i = increment_index(ad, i)){
+        process* pro = ad->processes[i];
+        printf("process id: %d\n", pro->pid);
+    }
+
 }
