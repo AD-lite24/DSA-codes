@@ -56,12 +56,27 @@ bool add_first_array_deque(array_deque *ad, process p) {
     process* pro = create_process(p);
     ad->size++;
 
+    int first = get_first_index(ad);
+    int last = get_last_index(ad);
     if (ad->size == ad->capacity){
+
         ad->processes = realloc(ad->processes, (ad->capacity)*2);
         int curr_capacity = ad->capacity;
         int new_capacity = curr_capacity*2;
         ad->capacity = new_capacity;
         printf("changed capacity from %d to %d\n", ad->size, ad->capacity);
+
+        
+        
+        if (last > first) {
+            int num_move = get_size_array_deque(ad) - first;
+            for (int i = first; i < num_move; i++){
+                ad->processes[i + ad->size] = ad->processes[i];
+                setToZero(ad->processes[i]);
+                
+            }
+            ad->next_first+=ad->size;
+        }
     }
     
     ad->processes[ad->next_first] = pro;
