@@ -4,6 +4,9 @@
 #files
 *.csv
 
+Executables
+test4
+test5
 
 #editor
 .vscode*
