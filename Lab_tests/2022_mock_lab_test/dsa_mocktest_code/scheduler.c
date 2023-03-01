@@ -66,12 +66,6 @@ static process **read_processes_from_file(char *filename, int *num_processes_ptr
     return processes;
 }
 
-bool checkIfComplete(int num_of_completions, int num_of_processes, int curr_time){
-    if (num_of_completions == num_of_processes) 
-        return true;
-    return false;
-}
-
 void checkArrivalTimes(process** processes, int num_of_processes, linked_deque* ld, int curr_time){
     for (int i = 0; i < num_of_processes; i++){
         process* p = processes[i];
@@ -163,10 +157,7 @@ void visualize_round_robin(char *path) {
             executing = true;
         }
 
-        bool flag = checkIfComplete(num_of_completions, num_processes, t); //check if all processes are done
-        if (flag) break;
-        
-
+        if (num_of_completions == num_processes) break;
     }
 
 

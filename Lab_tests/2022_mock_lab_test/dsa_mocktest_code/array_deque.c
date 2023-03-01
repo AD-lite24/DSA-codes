@@ -25,7 +25,7 @@ array_deque *create_empty_process_array_deque() {
     ad->processes = calloc(INITIAL_SIZE_ARRAY_DEQUE, sizeof(process));
     ad->capacity = INITIAL_SIZE_ARRAY_DEQUE;
     ad->next_first = 0;
-    ad->next_last = 0;
+    ad->next_last = 1;
     ad->size = 0;
 
     return ad;
@@ -52,30 +52,30 @@ static unsigned int get_last_index(array_deque *ad) {
 }
 
 bool add_first_array_deque(array_deque *ad, process p) {
-    
-    process* pro = create_process(p);
+    //Could not figure it out
+    process* pro = create_process(p); 
     ad->size++;
 
-    int first = get_first_index(ad);
-    int last = get_last_index(ad);
+    
     if (ad->size == ad->capacity){
 
+        int first = get_first_index(ad);
+        int last = get_last_index(ad);
         ad->processes = realloc(ad->processes, (ad->capacity)*2);
         int curr_capacity = ad->capacity;
         int new_capacity = curr_capacity*2;
         ad->capacity = new_capacity;
         printf("changed capacity from %d to %d\n", ad->size, ad->capacity);
 
-        
-        
-        if (last > first) {
+        if (last >= first) {
             int num_move = get_size_array_deque(ad) - first;
             for (int i = first; i < num_move; i++){
                 ad->processes[i + ad->size] = ad->processes[i];
-                setToZero(ad->processes[i]);
-                
+                ad->processes[i] = NULL;    
             }
-            ad->next_first+=ad->size;
+            for (int i = 0; i < ad->size; i++)
+                first = increment_index(ad, first);
+            ad->next_first = first;
         }
     }
     
