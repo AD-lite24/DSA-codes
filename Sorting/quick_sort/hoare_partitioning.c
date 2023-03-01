@@ -1,4 +1,14 @@
+#include <stdlib.h>
+#include "quick_sort.h"
+
 // Ls[lo..hi] is the input array; Ls[pInd] is the pivot
+
+int swap(int arr[], int i1, int i2){
+    int temp = arr[i1];
+    arr[i1] = arr[i2];
+    arr[i2] = temp;
+}
+
 int part(int Ls[], int lo, int hi, int pInd)
 {
     swap(Ls, pInd, lo);
