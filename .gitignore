@@ -3,10 +3,13 @@
 
 #files
 *.csv
+int5.txt
+int6.txt
 
-Executables
+#Executables
 test4
 test5
+hybrid
 
 #editor
 .vscode*
