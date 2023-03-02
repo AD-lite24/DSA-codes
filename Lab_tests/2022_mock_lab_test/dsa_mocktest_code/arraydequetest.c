@@ -14,10 +14,12 @@ int main(void) {
     add_first_array_deque(ad, p3);
     add_first_array_deque(ad, p4);
     add_first_array_deque(ad, p5);
-    add_last_array_deque(ad, p1);
+    // add_last_array_deque(ad, p1);
+    printf("printing 1: \n");
     print_array_deque(ad);
     process curr;
     remove_first_array_deque(ad, &curr);
     remove_first_array_deque(ad, &curr);
+    printf("printing 2: \n");
     print_array_deque(ad);
 }

@@ -30,7 +30,7 @@ void qsort_hybrid_v1(int Ls[], int lo, int hi)
     }
     else if (lo < hi)
     {
-        int p = lo; //some pivot algorithm or low in this case
+        int p = lo; //some pivot algorithm or just using low in this case
         p = part(Ls, lo, hi, p);
         qsort_hybrid_v1(Ls, lo, p - 1);
         qsort_hybrid_v1(Ls, p + 1, hi);
@@ -85,6 +85,7 @@ int main(){
     printf("v1 took %f seconds \n", time_taken);
     
     free(arr1);
+
     int* arr2 = calloc(length, sizeof(int));
     rewind(fp);
 

@@ -94,9 +94,6 @@ void visualize_round_robin(char *path) {
 
     linked_deque *ld = create_linked_process_deque();
 
-
-    // COMPLETE using the ld for storing processes as described
-
     int t = 0;
     int timeJump = TIME_QUANTUM;
     bool flag = false;

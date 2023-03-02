@@ -56,8 +56,21 @@ bool add_first_array_deque(array_deque *ad, process p) {
     process* pro = create_process(p); 
     ad->size++;
 
+    if (ad->size == 2){ //base case
+        // print_array_deque(ad);
+        printf("before done\n");
+        ad->processes = realloc(ad->processes, 4);
+        ad->processes[3] = ad->processes[1];
+        ad->processes[1] = NULL;
+        ad->capacity = 4;
+        ad->next_first = 3;
+        ad->next_last = 1;
+        printf("changed capacity from 2 to 4\n");
+        // print_array_deque(ad);
+
+    }
     
-    if (ad->size == ad->capacity){
+    else if (ad->size == ad->capacity){
 
         int first = get_first_index(ad);
         int last = get_last_index(ad);
@@ -67,15 +80,26 @@ bool add_first_array_deque(array_deque *ad, process p) {
         ad->capacity = new_capacity;
         printf("changed capacity from %d to %d\n", ad->size, ad->capacity);
 
-        if (last >= first) {
+        // if (last >= first) {
+        //     int num_move = get_size_array_deque(ad) - first;
+        //     for (int i = first; i < num_move; i++){
+        //         ad->processes[i + ad->size] = ad->processes[i];
+        //         ad->processes[i] = NULL;    
+        //     }
+        //     for (int i = 0; i < ad->size; i++)
+        //         first = increment_index(ad, first);
+        //     ad->next_first = first;
+        // }
+
+        if (last < first) {
             int num_move = get_size_array_deque(ad) - first;
-            for (int i = first; i < num_move; i++){
-                ad->processes[i + ad->size] = ad->processes[i];
-                ad->processes[i] = NULL;    
+            for (int i = 0; i < num_move; i++){
+                ad->processes[i + ad->capacity/2 + first] = ad->processes[i + first];
+                ad->processes[i + first] = NULL;
             }
-            for (int i = 0; i < ad->size; i++)
-                first = increment_index(ad, first);
-            ad->next_first = first;
+            for (int i = 0; i < ad->capacity/2; i++){
+                ad->next_first = increment_index(ad, ad->next_first);
+            }
         }
     }
     
@@ -152,11 +176,19 @@ void print_array_deque(array_deque *ad) {
 
     int first = get_first_index(ad);
     int last = get_last_index(ad);
+    // printf("out: %d\n", increment_index(ad, last));
     int size = get_size_array_deque(ad);
+    printf("first: %d last: %d\n", first, last);
 
-    for (int i = first; i != last; i = increment_index(ad, i)){
+    for (int i = first; i != ad->next_last; i = increment_index(ad, i)){
+        printf("i = %d\n", i);
         process* pro = ad->processes[i];
+        printf("%p\n", pro);
+        if (ad->processes[i] == NULL) 
+            printf("fuck/n");        
         printf("process id: %d\n", pro->pid);
     }
+    
+
 
 }
