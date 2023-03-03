@@ -3,13 +3,13 @@
 
 #files
 *.csv
-int5.txt
-int6.txt
+*.txt
 
 #Executables
 test4
 test5
 hybrid
+ex1
 
 #editor
 .vscode*
