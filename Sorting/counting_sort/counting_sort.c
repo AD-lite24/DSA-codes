@@ -13,12 +13,13 @@ void counting_sort(int* A, int* B, int k, int n){
         C[i] = run_sum;
     }
 
-    for (int i = n-1; i >= 0; i--){  //to ensure the stability
+    for (int i = n-1; i >= 0; i--){  //to ensure stability
         int num = A[i];
         B[C[num] - 1] = num;
         C[num]--;
     }
-    
+
+    free(C);
 }
 
 int main(){
