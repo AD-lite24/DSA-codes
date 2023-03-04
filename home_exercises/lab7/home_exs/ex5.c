@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 typedef struct data{
     int index;
@@ -11,6 +12,24 @@ void readFileUsingFscanf(FILE* fp, Data* msgs){
     while(!feof(fp)){
         fscanf(fp, "%d", &(msgs[i].index));
         fscanf(fp, ",%s\n", msgs[i].word);
+        i++;
+    }
+}
+
+void readFileUsingFgets(FILE* fp, Data* msgs){
+    
+    char buffer[25];   //Note that while using fgets, the string value is read with the \name
+    int i = 0;         //causing it to create new lines while printing even if they were not in
+                       //the print function
+
+    while(fgets(buffer, 25, fp) != NULL){
+
+        char* value = strtok(buffer, ",");
+        msgs[i].index = atoi(value);
+
+        value = strtok(NULL, ",");
+        strcpy(msgs[i].word, value);
+        // printf("%d\n", strlen(value));
         i++;
     }
 }
@@ -44,7 +63,9 @@ int main(){
     int n = 112;
     
     Data* msgs = calloc(112, sizeof(Data)); //112 words in the file
+
     readFileUsingFscanf(fp, msgs);
+    // readFileUsingFgets(fp, msgs);
     
     Data* output = calloc(n, sizeof(Data));
 
