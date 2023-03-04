@@ -8,6 +8,9 @@
 // Or an element is added at next_last which is then updated accordingly
 
 
+//NOTE: Has not been thoroughly tested yet, might give issues
+
+
 static unsigned int get_first_index(array_deque *ad);
 
 static unsigned int get_last_index(array_deque *ad);
