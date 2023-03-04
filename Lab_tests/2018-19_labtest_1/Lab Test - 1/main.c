@@ -17,7 +17,7 @@ void PrintArr()
 
 int main()
 {
-
+  PrintArr();
 }
   
 
