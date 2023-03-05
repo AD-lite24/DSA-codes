@@ -34,7 +34,7 @@ NODE createNewNode(Element data);
 void insertNodeIntoList(NODE node, LIST list);
 // This function inserts a node at the beginning of the list.
 
-void removeFirstNode(LIST list);
+int removeFirstNode(LIST list);
 // This function removes the first node from the list.
 
 // void insertNodeAtEnd(NODE node, LIST list); // Not required for stack. Required for Queue
