@@ -30,3 +30,5 @@ Contains various sorting algorithms and their implementations
 * Merge sort
 * External Merge Sort 
 * Quicksort
+* Bucket Sort
+* Radix Sort
