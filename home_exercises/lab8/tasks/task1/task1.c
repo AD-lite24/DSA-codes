@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include "hashtable_h.h"
 
-// INCOMPLETE
-
 typedef struct student
 {
     long long int ID;
