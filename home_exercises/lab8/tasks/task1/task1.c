@@ -32,7 +32,7 @@ int main()
     for (int i = 0; i < num_types; i++){
 
         int collisions = 0;
-        htable *table = create_table(num);
+        htable *table = create_table(2*num);
         for (int j = 0; j < num; j++){
             int check = ht_insert(table, students[j].ID, students[j].name, i);
             if (check) collisions++;
