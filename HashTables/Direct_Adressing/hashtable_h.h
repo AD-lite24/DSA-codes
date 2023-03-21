@@ -14,17 +14,17 @@ typedef struct htable
     int count;
 } htable;
 
-//Create items for the table
-ht_item* create_item(long long int key, char* value);
+// Create items for the table
+ht_item *create_item(long long int key, char *value);
 
-//Create table
-htable* create_table(int size);
+// Create table
+htable *create_table(int size);
 
-//Prints the table
+// Prints the table
 void print_table(htable *table);
 
-//Insert into the hashtable
-void ht_insert(htable *table, long long int key, char* value);
+// Insert into the hashtable
+void ht_insert(htable *table, long long int key, char *value);
 
 void free_item(ht_item *item);
 
