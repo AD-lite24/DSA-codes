@@ -6,7 +6,7 @@ enum status {FILLED, EMPTY, DELETED};
 typedef struct student
 {
     long long int ID;
-    char name[30];
+    char* name;
 } Student;
 
 typedef struct ht_item
@@ -41,5 +41,7 @@ void free_table(htable *table);
 int hashfunction(long long int key, int size, int type);
 
 Student* ht_search(ht_item *table, long long int ID, int m, int type);
+
+int ht_delete(htable *table, long long int ID, int type);
 
 #endif

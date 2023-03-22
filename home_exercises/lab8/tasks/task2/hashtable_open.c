@@ -159,6 +159,37 @@ int ht_insert(htable *table, Student student, int type)
     }
 }
 
+int ht_delete(htable* table, long long int ID, int type)
+{
+    int index = hashfunction(ID, table->size, 3); // 3 is type number for multiplicative hash function
+    ht_item *curr_item = table->items[index];
+
+    if (curr_item->stat == EMPTY)
+    {
+        printf("Value does not exist\n");
+        return 0;
+    }
+
+    else if (curr_item->student.ID != ID)
+    {
+        index = probe(table, index, table->size, type, ID);
+        if (index < 0)
+        {
+            printf("Value does not exist\n");
+            return 0;
+        }
+        else
+        {
+            curr_item = table->items[index];
+            curr_item->stat = DELETED;
+            return 1;
+        }
+    }
+
+    curr_item->stat = DELETED;
+    return 1;
+}
+
 Student *ht_search(htable *table, long long int ID, int m, int type)
 {
     int index = hashfunction(ID, m, 3); // 3 is type number for multiplicative hash function
