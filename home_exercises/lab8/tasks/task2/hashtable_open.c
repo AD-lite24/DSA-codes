@@ -40,17 +40,39 @@ int probe(htable *table, int index, int size, int type, long long int k)
         return doubleHashing(table, index, size, 0, k);
 
     default:
-        break;
+        return -1;
     }
 }
 
 //****** Hashtable functions ******//
 
+void free_item(ht_item *item)
+{
+    // Frees an item.
+    free(item->student.name);
+    free(item);
+}
+
+void free_table(htable *table)
+{
+    // Frees the table.
+    for (int i = 0; i < table->size; i++)
+    {
+        ht_item *item = table->items[i];
+
+        if (item != NULL)
+            free_item(item);
+    }
+
+    free(table->items);
+    free(table);
+}
+
 ht_item *create_item()
 {
     ht_item *item = malloc(sizeof(ht_item));
     item->stat = EMPTY;
-    item->student;
+    item->student.name = NULL;
     return item;
 }
 

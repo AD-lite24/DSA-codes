@@ -17,13 +17,13 @@ Student createStudentItem(long long int ID, char *name);
 int main()
 {
 
-    FILE *fp = fopen("../task1/t1_data.txt", "r"); // Change filepath if needed
+    FILE *fp = fopen("../task1/t1_data.txt", "r"); // Change filepath as needed
 
     int num;
     fscanf(fp, "%d\n", &num);
 
     Student students[num];
-    htable *table = create_table(TABLE_SIZE);
+    
 
     int idx = 0;
     while (!feof(fp))
@@ -37,22 +37,26 @@ int main()
 
     int num_types = 3; // 3 types of open addressing techniques
 
-    for (int i = 0; i < num_types; i++) // For all open addressing techniques, do the same operations for each
-    {
+    // for (int i = 0; i < num_types; i++) // For all open addressing techniques, do the same operations for each
+    // {
+        int i = 0;
+        htable *table = create_table(TABLE_SIZE);
         for (int j = 0; j < num; j++)
             ht_insert(table, students[i], i); // Populating the hashtable initially
 
         FILE *fq = fopen("t1_queries.txt", "r");
-        char *buffer = malloc(100);
-        while (fgets(buffer, 100, fq))
+        char *buffer = malloc(40);
+        while (fgets(buffer, 40, fq))
         {
-            int op = atoi(strtok(buffer, ",")[0]);
-
+            int op = atoi(strtok(buffer, ","));
+            printf("%d\n", op);
             switch (op)
             {
             case 1:
             {
-                long long int ID = atoll(strtok(NULL, ","));
+                char* ID_string = strtok(NULL, ",");
+                ID_string[9] = '\0';
+                long long int ID = atoll(ID_string);
                 char *name = malloc(30);
                 name = strtok(NULL, ",");
                 insert(table, ID, name, i);
@@ -61,14 +65,23 @@ int main()
 
             case 2:
             {
-                long long int ID = atoll(strtok(NULL, ","));
-                delete (table, ID, i);
+                char* ID_string = strtok(NULL, ",");
+                ID_string[9] = '\0';
+                long long int ID = atoll(ID_string);
+                delete(table, ID, i);
                 break;
             }
 
             case 3:
-            {
-                long long int ID = atoll(strtok(NULL, ","));
+            {   
+                char* ID_string = strtok(NULL, ",");
+                printf("char: %d\n", ID_string[9]);
+                ID_string[9] = '\0';
+                printf("char: %d\n", ID_string[9]);
+                printf("%s with len %lu\n", ID_string, strlen(ID_string));
+
+                int ID = atoi(ID_string);
+                printf("ID is: %d", ID);
                 Student* student = search(table, ID, i);
                 break;
             }
@@ -76,8 +89,13 @@ int main()
             default:
                 break;
             }
+            
         }
-    }
+
+        free_table(table);
+        fclose(fq);
+        // break;
+    // }
 }
 
 Student createStudentItem(long long int ID, char *name)
