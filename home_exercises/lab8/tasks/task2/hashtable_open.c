@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "hashtable_h.h"
+#include <string.h>
 
 //******* Utility functions ******//
 
@@ -59,11 +60,12 @@ void free_table(htable *table)
     for (int i = 0; i < table->size; i++)
     {
         ht_item *item = table->items[i];
-
+        printf("Free function id: %lld\n", item->student.ID);
+        printf("Free function name: %s\n", item->student.name);
         if (item != NULL)
             free_item(item);
     }
-
+    
     free(table->items);
     free(table);
 }
@@ -72,13 +74,12 @@ ht_item *create_item()
 {
     ht_item *item = malloc(sizeof(ht_item));
     item->stat = EMPTY;
-    item->student.name = NULL;
+    item->student.name = malloc(30);
     return item;
 }
 
 htable *create_table(int size)
 {
-
     htable *table = malloc(sizeof(htable));
     table->size = size;
     table->items = (ht_item **)calloc(table->size, sizeof(ht_item *));
@@ -138,6 +139,9 @@ int ht_insert(htable *table, Student student, int type)
     if (curr_item->stat == EMPTY || curr_item->stat == DELETED) // Good to go
     {
         table->items[index]->student = student;
+        printf("direct student name: %s\n", student.name);
+        strcpy(table->items[index]->student.name, student.name);
+        printf("copied student name: %s\n", table->items[index]->student.name);
         table->count++;
         table->items[index]->stat = FILLED;
         return 1;
@@ -150,19 +154,19 @@ int ht_insert(htable *table, Student student, int type)
         {
         case 0:
         {
-            int index = linearProbing(table, index, table->size, 1, student.ID);
+            index = linearProbing(table, index, table->size, 1, student.ID);
             break;
         }
 
         case 1:
         {
-            int index = quadraticProbing(table, index, table->size, 1, student.ID);
+            index = quadraticProbing(table, index, table->size, 1, student.ID);
             break;
         }
 
         case 2:
         {
-            int index = doubleHashing(table, index, table->size, 1, student.ID); // K is the key ie. ID
+            index = doubleHashing(table, index, table->size, 1, student.ID); // K is the key ie. ID
             break;
         }
 
@@ -172,21 +176,24 @@ int ht_insert(htable *table, Student student, int type)
 
         if (index < 0)
             return 0;
+
         else
         {
-            table->items[index]->student = student;
+            table->items[index]->student.ID = student.ID;
+            strcpy(table->items[index]->student.name, student.name);
             table->items[index]->stat = FILLED;
+
             return 1;
         }
     }
 }
 
-int ht_delete(htable* table, long long int ID, int type)
+int ht_delete(htable *table, long long int ID, int type)
 {
     int index = hashfunction(ID, table->size, 3); // 3 is type number for multiplicative hash function
     ht_item *curr_item = table->items[index];
 
-    if (curr_item->stat == EMPTY)
+    if (curr_item->stat != FILLED)
     {
         printf("Value does not exist\n");
         return 0;
@@ -218,10 +225,16 @@ Student *ht_search(htable *table, long long int ID, int m, int type)
     ht_item *curr_item = table->items[index];
 
     if (curr_item->stat == EMPTY)
+    {
+        printf("Not Found\n");
         return NULL;
-    
+    }
+
     else if (curr_item->student.ID == ID)
+    {
+        printf("Student with id: %lld found with name: %s\n", ID, curr_item->student.name);
         return &(curr_item->student);
+    }
 
     else
     {
@@ -231,7 +244,8 @@ Student *ht_search(htable *table, long long int ID, int m, int type)
             printf("Not found\n");
             return NULL;
         }
-        else return &(table->items[index]->student);
+        else
+            return &(table->items[index]->student);
     }
 }
 
@@ -243,6 +257,7 @@ int linearProbing(htable *table, int index, int size, int insertion, long long i
     int i = 0;
     while (i != size)
     {
+        i++;
         index = (index + i) % size;
         ht_item *item = table->items[index];
         if (insertion)
@@ -264,7 +279,7 @@ int linearProbing(htable *table, int index, int size, int insertion, long long i
             else
                 return -1;
         }
-        i++;
+
         //** END of searching **//
     }
     printf("Table full\n");
