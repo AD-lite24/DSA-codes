@@ -39,7 +39,7 @@ int main()
 
     for (int i = 0; i < num_types; i++) // For all open addressing techniques, do the same operations for each
     {
-        int i = 0;
+        printf("Starting %d type\n", i);
         htable *table = create_table(TABLE_SIZE);
         for (int j = 0; j < num; j++)
             ht_insert(table, students[j], i); // Populating the hashtable initially
@@ -74,7 +74,6 @@ int main()
             {   
                 char* ID_string = strtok(NULL, ",");
                 int ID = atoi(ID_string);
-
                 Student* student = search(table, ID, i);
                 break;
             }
@@ -84,10 +83,10 @@ int main()
             }
         }
 
-
+        printf("Finished with %d type\n", i);
         free_table(table);
         fclose(fq);
-        break;
+
     }
 }
 

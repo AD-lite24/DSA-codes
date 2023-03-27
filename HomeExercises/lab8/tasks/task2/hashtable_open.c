@@ -60,8 +60,8 @@ void free_table(htable *table)
     for (int i = 0; i < table->size; i++)
     {
         ht_item *item = table->items[i];
-        printf("Free function id: %lld\n", item->student.ID);
-        printf("Free function name: %s\n", item->student.name);
+        // printf("Free function id: %lld\n", item->student.ID);
+        // printf("Free function name: %s\n", item->student.name);
         if (item != NULL)
             free_item(item);
     }
@@ -74,7 +74,8 @@ ht_item *create_item()
 {
     ht_item *item = malloc(sizeof(ht_item));
     item->stat = EMPTY;
-    item->student.name = malloc(30);
+    item->student.ID = -1;
+    item->student.name = malloc(40);
     return item;
 }
 
@@ -138,10 +139,10 @@ int ht_insert(htable *table, Student student, int type)
 
     if (curr_item->stat == EMPTY || curr_item->stat == DELETED) // Good to go
     {
-        table->items[index]->student = student;
-        printf("direct student name: %s\n", student.name);
+        table->items[index]->student.ID = student.ID;
+        // printf("direct student name: %s\n", student.name);
         strcpy(table->items[index]->student.name, student.name);
-        printf("copied student name: %s\n", table->items[index]->student.name);
+        // printf("copied student name: %s\n", table->items[index]->student.name);
         table->count++;
         table->items[index]->stat = FILLED;
         return 1;
@@ -193,7 +194,11 @@ int ht_delete(htable *table, long long int ID, int type)
     int index = hashfunction(ID, table->size, 3); // 3 is type number for multiplicative hash function
     ht_item *curr_item = table->items[index];
 
-    if (curr_item->stat != FILLED)
+    if (type == 1)
+    {
+        printf("hash done with index %d\n", index);
+    }
+    if (curr_item->stat == EMPTY)
     {
         printf("Value does not exist\n");
         return 0;
@@ -294,6 +299,7 @@ int quadraticProbing(htable *table, int index, int size, int insertion, long lon
     int i = 0;
     while (i != size)
     {
+        i++;
         index = (index + c1 * i + c2 * i * i) % size;
         ht_item *item = table->items[index];
 
@@ -312,7 +318,7 @@ int quadraticProbing(htable *table, int index, int size, int insertion, long lon
                     continue;
             }
         }
-        i++;
+        
     }
     printf("Table full\n");
     return -1;
@@ -324,6 +330,7 @@ int doubleHashing(htable *table, int index, int size, int insertion, long long i
     int h2 = 1 + (k % 1023);
     while (i != size)
     {
+        i++;
         index = (index + i * h2) % size;
         ht_item *item = table->items[index];
 
@@ -342,7 +349,6 @@ int doubleHashing(htable *table, int index, int size, int insertion, long long i
                     continue;
             }
         }
-        i++;
     }
     printf("Table full\n");
     return -1;
