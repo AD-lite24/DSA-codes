@@ -1,23 +1,25 @@
-#include "element.h"
 #include "stack.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include "bst.h"
 
-#define STACK_SIZE 1000
+#define STACK_SIZE 100
 struct Stack
 {
-int top;
-Element data[STACK_SIZE];
+    int top;
+    Node* data[STACK_SIZE];
 };
 
 Stack *newStack()
 {
     Stack *s = (Stack *)malloc(sizeof(Stack));
+    for (int i = 0; i < STACK_SIZE; i++)
+        s->data[i] = malloc(sizeof(Node));
     if(s != NULL)
         s->top = -1;
     return s;
 }
-bool push(Stack *s, Element e)
+bool push(Stack *s, Node* e)
 {
     if(s->top == STACK_SIZE - 1)
         return false;
@@ -32,13 +34,13 @@ bool pop(Stack *s){
     return true;
 }
 
-Element *top(Stack *s){
+Node *top(Stack *s){
     
     if (s->top == -1){
         return NULL;
     }
 
-    return &(s->data[s->top]);
+    return s->data[s->top];
 }
 
 bool isEmpty(Stack *s){
