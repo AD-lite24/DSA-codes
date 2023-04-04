@@ -10,15 +10,16 @@ void traverse_in_order(Node *node);
 int main()
 {
     BST *bst = new_bst();
-    insert(bst, 5);
-    insert(bst, 4);
-    insert(bst, 1);
-    insert(bst, 3);
-    insert(bst, 2);
-    insert(bst, 9);
-    insert(bst, 8);
-    insert(bst, 6);
-    insert(bst, 10);
+    insert(bst, 50);
+    insert(bst, 35);
+    insert(bst, 64);
+    insert(bst, 12);
+    insert(bst, 48);
+    insert(bst, 49);
+    insert(bst, 98);
+    insert(bst, 80);
+    insert(bst, 100);
+    insert(bst, 69);
 
     removeHalfNodes(bst->root);
     traverse_in_order(bst->root);
