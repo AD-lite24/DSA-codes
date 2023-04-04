@@ -4,21 +4,27 @@
 
 void removeHalfNodes(Node* root);
 int hasSingleChild(Node* left, Node* right);
+void traverse_in_order(Node *node);
+
 
 int main()
 {
     BST *bst = new_bst();
-    insert(bst, 2);
+    insert(bst, 5);
+    insert(bst, 4);
     insert(bst, 1);
     insert(bst, 3);
-    insert(bst, 4);
-    insert(bst, 5);
-    insert(bst, 6);
-    insert(bst, 7);
+    insert(bst, 2);
+    insert(bst, 9);
     insert(bst, 8);
+    insert(bst, 6);
+    insert(bst, 10);
 
     removeHalfNodes(bst->root);
+    traverse_in_order(bst->root);
 }
+
+
 void removeHalfNodes(Node* root)
 {
 
@@ -32,29 +38,35 @@ void removeHalfNodes(Node* root)
         // If left has only one right child
         if (curr->left->left == NULL && curr->left->right != NULL)
         {
-            curr->left = curr->left->right;
+            Node* temp = curr->left->right;
             free(curr->left);
+            curr->left = temp;
         }
 
         // If left has only one left child
         else if (curr->left->left != NULL && curr->left->right == NULL)
         {
-            curr->left = curr->left->left;
+            Node* temp = curr->left->left;
             free(curr->left);
+            curr->left = temp;
         }
+
 
         // If right has only one right child
         else if (curr->right->left == NULL && curr->right->right != NULL)
         {
-            curr->right = curr->right->right;
+            // curr->right = curr->right->right;
+            Node* temp = curr->right->right;
             free(curr->right);
+            curr->right = temp;
         }
 
         // If right has only one left child
         else if (curr->right->left != NULL && curr->right->right == NULL)
         {
-            curr->right = curr->right->left;
+            Node* temp = curr->right->left;
             free(curr->right);
+            curr->right = temp;
         }
     }    
 
@@ -81,4 +93,14 @@ int hasSingleChild(Node* left_node, Node* right_node)
         return 1;
     
     return 0;
+}
+
+void traverse_in_order(Node *node)
+{
+    if (node == NULL)
+        return;
+
+    traverse_in_order(node->left);
+    printf("%d ", node->value);
+    traverse_in_order(node->right);
 }
