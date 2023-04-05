@@ -11,14 +11,16 @@ int main()
 {
     FILE* fp = fopen("dat10.csv", "r");
     Person* array = calloc(NUM_ENTRIES, sizeof(Person));
-
+    
+    int id1 = 8;
+    int id2 = 2;
 
     for(int i = 0; !feof(fp); i++)
         fscanf(fp, "%d,%[^,],%d,%d,%d\n", &(array[i].id), array[i].name, &(array[i].age), &(array[i].height), &(array[i].weight));
 
     BST* bst = constructBST(array);
-    Node* ancestor = LCA(bst->root, 8, 9);      //LCA between ID1 and ID2
-
+    Node* ancestor = LCA(bst->root, id1, id2);      //LCA between ID1 and ID2
+    printf("LCA id is %d", ancestor->person.id);
 }
 
 BST* constructBST(Person *array)

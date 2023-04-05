@@ -1,6 +1,15 @@
 #ifndef BST_H
 #define BST_H
 
+typedef struct person
+{
+    int id;
+    char name[20];
+    int age;
+    int height;
+    int weight;
+} Person;
+
 typedef struct node
 {
     Person person;
@@ -12,15 +21,6 @@ typedef struct bst
 {
     Node *root;
 } BST;
-
-typedef struct person
-{
-    int id;
-    char name[20];
-    int age;
-    int height;
-    int weight;
-} Person;
 
 BST* new_bst();
 
