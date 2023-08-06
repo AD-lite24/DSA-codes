@@ -1,5 +1,5 @@
 # DSA-codes
-C code written for the course CS F211 (DSA)
+C code written for the course CS F211 (DSA) <README is not maintained>
 
 ## HomeExercisesAndTasks
 Contains the solutions for some home assignments and tasks given in the labsheet for each lab
